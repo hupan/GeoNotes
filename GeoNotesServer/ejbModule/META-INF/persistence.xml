@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	<persistence-unit name="jpaunit">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		<class>entity.Path</class>
+		<class>entity.Place</class>
+		<class>entity.Route</class>
+		<class>entity.User</class>
+		<class>entity.Stat</class>
+		<properties>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost/dbmw" />
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="" />
+            <property name="eclipselink.ddl-generation.output-mode" value="database"/>
+		</properties>
+	</persistence-unit>
+</persistence>
