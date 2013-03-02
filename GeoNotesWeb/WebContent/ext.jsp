@@ -135,7 +135,7 @@
     </head>
     <body style="margin:0 auto;padding:0;">
        	<div class="ui-bar-a ui-header">
-        	<h1 id="toptitle" class="ui-title">Please log in...</h1>
+        	<h1 id="toptitle" class="ui-title">The way...</h1>
         </div>
 
         <div style="margin:0 auto; padding:0;" id="centraldiv" class="ui-content">

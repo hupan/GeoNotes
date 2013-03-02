@@ -2,7 +2,47 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
     	               "http://www.w3.org/TR/html4/loose.dtd">
 	<script type="text/javascript">
+		$(function(){
+			location.hash="login";
+			history.pushState( null, null, this.href);
+			$(window).unbind("popstate");
+			
+			var hisLoc = history.location;
+			//If IE......
+			if(hisLoc!=null && hisLoc.hash.indexOf("#") == -1){
+				$( window ).bind( "popstate", function( e ) {
+	        		var returnLocation = document.location;
+	        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
+					if(hash=='register'){
+	        			$.ajax({
+	        				url:'register.jsp',
+	        				type:'POST',
+	        				success:function(data){
+		        				$('#centraldiv').html(data);
+	        				}
+	        			});
+					}
+	       		})
+			}
+			else {
+				$( window ).bind( "popstate", function( e ) {
+	        		var returnLocation = document.location;
+	        		
+	        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
+					if(hash=='login'){
+	        			$.ajax({
+	        				url:'register.jsp',
+	        				type:'POST',
+	        				success:function(data){
+		        				$('#centraldiv').html(data);
+	        				}
+	        			});
+					}
+	       		})
+			}				
+		})	
         $(function(){
+        	$("#toptitle").html("Success! Now login...");
         	$('#login').button();
         	$('input').button().css({
           		'font' : 'inherit',

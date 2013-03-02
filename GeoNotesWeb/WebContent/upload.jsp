@@ -13,26 +13,12 @@
 			var infowindow = new google.maps.InfoWindow({
 				content: contentString
 			});
-       		function startgps()
-	      	{
-	        	gps = navigator.geolocation;
-	       		if (gps)
-	        	{
-	            gps.getCurrentPosition(showgps,
-	            	function(error){
-	                	alert("Got an error, code: " + error.code + " message: "+ error.message);
-	            	},
-					{maximumAge: 10000});
-	          	}
-	           	else
-	            {
-	            	showgps();
-	        	}
-			}   
+			
 	      	function showgps(position)
 			{
 	            if (position)
 	            {
+	            	
 	                latitude = position.coords.latitude;
 	               	longitude = position.coords.longitude;
 	               	if(inc == 0){
@@ -45,6 +31,21 @@
 					alert("Position is null");
 			}
 			
+       		function startgps()
+	      	{
+       			
+
+	       		if ("geolocation" in navigator)
+	        	{
+	       			
+	       			navigator.geolocation.getCurrentPosition(showgps);
+	          	}
+	           	else
+	            {
+	            	alert("error");
+	        	}
+			}   
+
 			function keeprefresh(){
 				setTimeout(function(){
 					startgps();
@@ -81,20 +82,42 @@
 			$(function(){
 				location.hash="upload";
 				history.pushState( null, null, this.href);
-				$(window).unbind('popstate');
-				$( window ).bind( "popstate", function( e ) {
-	        		var returnLocation = history.location;
-	        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
-					if(hash=='upload'){
-	        			$.ajax({
-	        				url:'adminboard.jsp',
-	        				type:'POST',
-	        				success:function(data){
-		        				$('#centraldiv').html(data);
-	        				}
-	        			});
-					}
-	       		})
+				$(window).unbind("popstate");
+				
+				var hisLoc = history.location;
+				//If IE......
+				if(hisLoc!=null && hisLoc.hash.indexOf("#") == -1){
+					$( window ).bind( "popstate", function( e ) {
+		        		var returnLocation = document.location;
+		        		
+		        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
+						if(hash=='admin'){
+		        			$.ajax({
+		        				url:'adminboard.jsp',
+		        				type:'POST',
+		        				success:function(data){
+			        				$('#centraldiv').html(data);
+		        				}
+		        			});
+						}
+		       		})
+				}
+				else {
+					$( window ).bind( "popstate", function( e ) {
+		        		var returnLocation = document.location;
+		        		
+		        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
+						if(hash=='upload'){
+		        			$.ajax({
+		        				url:'adminboard.jsp',
+		        				type:'POST',
+		        				success:function(data){
+			        				$('#centraldiv').html(data);
+		        				}
+		        			});
+						}
+		       		})
+				}				
 			})
         	$(function(){
 	        	$('#upload').button();
@@ -155,27 +178,32 @@
 					$('#map_canvas').width($('body').width());
 					$('#map_canvas').height($('#centraltable').height()*1.5);
 					$('#panel').width($('body').width());
-        			$.ajax({
-        				url:'RetrieveServlet',
-        				type:'POST',
-        				data:{
-        				},
-        				success:function(data){
-						    $.each(data, function (index, value) {
-						        var location = new google.maps.LatLng(value[1], value[2]);
-	        					var marker = new google.maps.Marker({
-							    	position: location,
-							        map: map,
-							        text: 'Name: ' + value[4] + '</br>Description: ' + value[5]
-							    });
-							    google.maps.event.addListener(marker, 'click', function(){
-							    	infowindow.setContent(marker.get("text"));
-							    	infowindow.open(map, marker);
-							   	})					        
-						    });
-        				}
-        			});
 					startgps();
+					setTimeout(function(){
+	        			$.ajax({
+	        				url:'RetrieveServlet',
+	        				type:'POST',
+	        				data:{
+	        				},
+	        				success:function(data){
+							    $.each(data, function (index, value) {
+							        var location = new google.maps.LatLng(value[1], value[2]);
+		        					var marker = new google.maps.Marker({
+								    	position: location,
+								        map: map,
+								        text: 'Name: ' + value[4] + '</br>Description: ' + value[5]
+								    });
+								    google.maps.event.addListener(marker, 'click', function(){
+								    	infowindow.setContent(marker.get("text"));
+								    	infowindow.open(map, marker);
+								   	})					        
+							    });
+	        				}
+	        			});
+						
+					}, 500);
+
+					
 
 				});
         	})

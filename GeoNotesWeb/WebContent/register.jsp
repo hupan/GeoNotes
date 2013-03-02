@@ -6,15 +6,30 @@
 			location.hash="register";
 			history.pushState( null, null, this.href);
 			$(window).unbind("popstate");
-			$( window ).bind( "popstate", function( e ) {
-        		var returnLocation = history.location;
-        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
-				if(hash=='register'){
-					window.location.href="http://localhost:8080/GeoNotesWeb/";
-				}
-       		})
+			var hisLoc = history.location;
+			//If IE.......
+			if(hisLoc!=null && hisLoc.hash.indexOf("#") == -1){
+				$( window ).bind( "popstate", function( e ) {
+	        		var returnLocation = document.location;
+		        	var hash = escape(returnLocation.hash.replace( /^#/, ''));
+					if(hash==''){
+						window.location.href="http://www.pandahoo.com/GeoNotesWeb/";
+					}
+				})
+			}
+			else {
+				$( window ).bind( "popstate", function( e ) {
+	        		var returnLocation = document.location;
+		        	var hash = escape(returnLocation.hash.replace( /^#/, ''));
+					if(hash=='register'){
+						window.location.href="http://www.pandahoo.com/GeoNotesWeb/";
+					}
+				})
+			}
+			
 		})
         $(function(){
+        	$('#toptitle').html("Register...");
         	$('#register').button();
         	$('#goback').button();
         	$('input').button().css({
@@ -49,7 +64,7 @@
         					alert("Username already exists.");
         				}
         				else{
-        					$("#toptitle").html("Success! Now login...");
+        					
         					$("#centraldiv").html(data);
         				}
         			    
@@ -58,7 +73,7 @@
         	});
         	$('#goback').unbind('click');
         	$('#goback').click(function(){
-        		window.location.reload();
+        		window.location.href="http://www.pandahoo.com/GeoNotesWeb/";
         	})
         })
   	</script>

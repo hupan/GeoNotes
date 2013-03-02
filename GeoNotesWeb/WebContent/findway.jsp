@@ -275,22 +275,47 @@
 				location.hash="findway";
 				history.pushState( null, null, this.href);
 				$(window).unbind("popstate");
-				$( window ).bind( "popstate", function( e ) {
-	        		var returnLocation = history.location;
-	        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
-					if(hash=='findway'){
-	        			$.ajax({
-	        				url:'userboard.jsp',
-	        				type:'POST',
-	        				data:{
-	        					username:'<%=username%>'
-	        				},
-	        				success:function(data){
-		        				$('#centraldiv').html(data);
-	        				}
-	        			});
-					}
-	       		})
+				
+				var hisLoc = history.location;
+				//If IE......
+				if(hisLoc!=null && hisLoc.hash.indexOf("#") == -1){
+					$( window ).bind( "popstate", function( e ) {
+		        		var returnLocation = document.location;
+		        		
+		        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
+						if(hash=='user'){
+		        			$.ajax({
+		        				url:'userboard.jsp',
+		        				type:'POST',
+		        				data:{
+		        					username: '<%=username%>'
+		        				},
+		        				success:function(data){
+			        				$('#centraldiv').html(data);
+		        				}
+		        			});
+						}
+		       		})
+				}
+				else {
+					$( window ).bind( "popstate", function( e ) {
+		        		var returnLocation = document.location;
+		        		
+		        		var hash = escape(returnLocation.hash.replace( /^#/, ''));
+						if(hash=='findway'){
+		        			$.ajax({
+		        				url:'userboard.jsp',
+		        				type:'POST',
+		        				data:{
+		        					username: '<%=username%>'
+		        				},
+		        				success:function(data){
+			        				$('#centraldiv').html(data);
+		        				}
+		        			});
+						}
+		       		})
+				}				
 			})
         	$(function(){
         		$("#sharelocation").click(function(){
